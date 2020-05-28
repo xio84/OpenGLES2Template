@@ -7,6 +7,7 @@ public:
 	struct Attributes
 	{
 		GLint position;
+		GLint color;
 	};
 
 	struct Uniforms

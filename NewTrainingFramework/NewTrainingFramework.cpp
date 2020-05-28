@@ -19,16 +19,21 @@ int Init( ESContext *esContext )
 	glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
 	//triangle data
-	verticesData[0].pos = Vector3(  0.5,  0.5,  0.0 );
+	verticesData[0].pos = Vector3(0.5,  0.5,  0.0);
 	verticesData[1].pos = Vector3( -0.5, 0.5,  0.0 );
 	verticesData[2].pos = Vector3(  -0.5, -0.5,  0.0 );
 	verticesData[3].pos = Vector3(0.5, -0.5, 0.0);
 
-	pindices[0] = 0;
-	pindices[1] = 1;
-	pindices[2] = 2;
+	verticesData[0].color = Vector4(0.0, 1.0, 0.0, 0.5);
+	verticesData[1].color = Vector4(1.0, 0.0, 0.0, 0.5);
+	verticesData[2].color = Vector4(1.0, 1.0, 1.0, 0.5);
+	verticesData[3].color = Vector4(0.0, 0.0, 1.0, 0.5);
+
+	pindices[0] = 1;
+	pindices[1] = 2;
+	pindices[2] = 3;
 	pindices[3] = 0;
-	pindices[4] = 2;
+	pindices[4] = 1;
 	pindices[5] = 3;
 
 	glGenBuffers(1, &vboId);
@@ -61,6 +66,16 @@ void Draw( ESContext *esContext )
 		glEnableVertexAttribArray( myShaders.GetAttributes().position );
 		glVertexAttribPointer( myShaders.GetAttributes().position, 3, GL_FLOAT, GL_FALSE, sizeof( Vertex ), 0 );
 	}
+
+	if (myShaders.GetAttributes().color != -1)
+	{
+		glEnableVertexAttribArray(myShaders.GetAttributes().color);
+		glVertexAttribPointer(myShaders.GetAttributes().color, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (char*) 0 + sizeof(Vector3));
+	}
+	else {
+		printf("No Color!\n");
+	}
+
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
