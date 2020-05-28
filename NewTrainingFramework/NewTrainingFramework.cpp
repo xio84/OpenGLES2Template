@@ -11,7 +11,7 @@
 GLuint vboId;
 GLuint iboId;
 Shaders		myShaders;
-Vertex		verticesData[6];
+Vertex		verticesData[4];
 int pindices[6];
 
 int Init( ESContext *esContext )
@@ -19,31 +19,29 @@ int Init( ESContext *esContext )
 	glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
 	//triangle data
-	verticesData[0].pos = Vector3(  -0.5,  0.5,  0.0 );
-	verticesData[1].pos = Vector3( -1, -0.5,  0.0 );
-	verticesData[2].pos = Vector3(  0, -0.5,  0.0 );
-	verticesData[3].pos = Vector3(0.5, 0.5, 0.0);
-	verticesData[4].pos = Vector3(1, -0.5, 0.0);
-	verticesData[5].pos = Vector3(0, -0.5, 0.0);
+	verticesData[0].pos = Vector3(  0.5,  0.5,  0.0 );
+	verticesData[1].pos = Vector3( -0.5, 0.5,  0.0 );
+	verticesData[2].pos = Vector3(  -0.5, -0.5,  0.0 );
+	verticesData[3].pos = Vector3(0.5, -0.5, 0.0);
 
 	pindices[0] = 0;
 	pindices[1] = 1;
 	pindices[2] = 2;
-	pindices[3] = 3;
-	pindices[4] = 4;
-	pindices[5] = 5;
+	pindices[3] = 0;
+	pindices[4] = 2;
+	pindices[5] = 3;
 
 	glGenBuffers(1, &vboId);
 	glBindBuffer(GL_ARRAY_BUFFER, vboId);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*6, verticesData,
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*4, verticesData,
 		GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	glGenBuffers(1, &iboId);
+	/*glGenBuffers(1, &iboId);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*6, pindices,
 		GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);*/
 
 	//creation of shaders and program 
 	myShaders.Init( "../Resources/Shaders/TriangleShaderVS.vs", "../Resources/Shaders/TriangleShaderFS.fs" );
@@ -64,13 +62,13 @@ void Draw( ESContext *esContext )
 		glVertexAttribPointer( myShaders.GetAttributes().position, 3, GL_FLOAT, GL_FALSE, sizeof( Vertex ), 0 );
 	}
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, pindices);
 
 	//glDrawArrays( GL_TRIANGLES, 0, 3 );
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	eglSwapBuffers( esContext->eglDisplay, esContext->eglSurface );
 }
