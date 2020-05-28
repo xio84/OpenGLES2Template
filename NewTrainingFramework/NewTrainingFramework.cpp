@@ -37,11 +37,11 @@ int Init( ESContext *esContext )
 		GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	/*glGenBuffers(1, &iboId);
+	glGenBuffers(1, &iboId);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*6, pindices,
 		GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);*/
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	//creation of shaders and program 
 	myShaders.Init( "../Resources/Shaders/TriangleShaderVS.vs", "../Resources/Shaders/TriangleShaderFS.fs" );
@@ -62,13 +62,13 @@ void Draw( ESContext *esContext )
 		glVertexAttribPointer( myShaders.GetAttributes().position, 3, GL_FLOAT, GL_FALSE, sizeof( Vertex ), 0 );
 	}
 
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, pindices);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	//glDrawArrays( GL_TRIANGLES, 0, 3 );
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	eglSwapBuffers( esContext->eglDisplay, esContext->eglSurface );
 }
