@@ -8,13 +8,12 @@
 #include "Globals.h"
 #include <conio.h>
 #include "Model.h"
+#include "Texture.h"
 
-GLuint		textureID;
 Shaders		myShaders;
 Vertex		*verticesData;
 Model		*targetModel;
-char		*imageData;
-int			width, height, bpp, iTextureLoc;
+Texture		*targetTexture;
 
 int Init(ESContext* esContext)
 {
@@ -41,14 +40,9 @@ int Init(ESContext* esContext)
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 
-	// Generate the texture
-	glGenTextures(1, &textureID);
-
-	// Bind and load Texture data
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	imageData = LoadTGA("../Resources/Textures/Woman1.tga", &width, &height, &bpp);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
-		GL_RGB, GL_UNSIGNED_BYTE, imageData);
+	// Setup Texture
+	targetTexture = new Texture;
+	targetTexture->InitTexture("../Resources/Textures/Woman1.tga");
 
 	// Setting texture parameters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -57,8 +51,8 @@ int Init(ESContext* esContext)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	// Setting texture uniform
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	iTextureLoc = glGetUniformLocation(myShaders.GetProgram(), "u_texture");
+	glBindTexture(GL_TEXTURE_2D, targetTexture->textureID);
+	int iTextureLoc = glGetUniformLocation(myShaders.GetProgram(), "u_texture");
 	glUniform1i(iTextureLoc, 0);
 
 	// Reading data
