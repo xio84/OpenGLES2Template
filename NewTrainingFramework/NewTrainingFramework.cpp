@@ -36,7 +36,7 @@ int Init(ESContext* esContext)
 	pindices[5] = 3;*/
 
 	// Enable depth test
-	//glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 
 	// Reading data
 	targetModel = new Model;
@@ -49,7 +49,7 @@ int Init(ESContext* esContext)
 
 void Draw(ESContext* esContext)
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glUseProgram(myShaders.GetProgram());
 
