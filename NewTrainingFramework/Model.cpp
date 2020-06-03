@@ -35,7 +35,6 @@ void Model::InitModel(char* filename)
 				&verticesData[i].uv.x, &verticesData[i].uv.y);
 			// Texture mapping has not been implemented,
 			// All color is set to green
-			verticesData[i].color = Vector4(0.0, 1.0, 0.0, 0.5);
 			printf("Vertex %d scanned, values: %f %f %f, %f %f %f, %f %f %f, %f %f %f, %f %f\n", buffer,
 				verticesData[i].pos.x, verticesData[i].pos.y, verticesData[i].pos.z,
 				verticesData[i].normal.x, verticesData[i].normal.y, verticesData[i].normal.z,

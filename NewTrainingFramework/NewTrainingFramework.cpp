@@ -9,9 +9,12 @@
 #include <conio.h>
 #include "Model.h"
 
+GLuint		textureID;
 Shaders		myShaders;
 Vertex		*verticesData;
 Model		*targetModel;
+char		*imageData;
+int			width, height, bpp, iTextureLoc;
 
 int Init(ESContext* esContext)
 {
@@ -38,6 +41,26 @@ int Init(ESContext* esContext)
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 
+	// Generate the texture
+	glGenTextures(1, &textureID);
+
+	// Bind and load Texture data
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	imageData = LoadTGA("../Resources/Textures/Woman1.tga", &width, &height, &bpp);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
+		GL_RGB, GL_UNSIGNED_BYTE, imageData);
+
+	// Setting texture parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	// Setting texture uniform
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	iTextureLoc = glGetUniformLocation(myShaders.GetProgram(), "u_texture");
+	glUniform1i(iTextureLoc, 0);
+
 	// Reading data
 	targetModel = new Model;
 	targetModel->InitModel("../Resources/Models/Woman1.nfg");
@@ -61,10 +84,10 @@ void Draw(ESContext* esContext)
 		glVertexAttribPointer(myShaders.GetAttributes().position, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 	}
 
-	if (myShaders.GetAttributes().color != -1)
+	if (myShaders.GetAttributes().uv != -1)
 	{
-		glEnableVertexAttribArray(myShaders.GetAttributes().color);
-		glVertexAttribPointer(myShaders.GetAttributes().color, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (char*)0 + sizeof(Vector3));
+		glEnableVertexAttribArray(myShaders.GetAttributes().uv);
+		glVertexAttribPointer(myShaders.GetAttributes().uv, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (char*)0 + (sizeof(Vector3) * 4));
 	}
 	else {
 		printf("No Color!\n");
