@@ -16,13 +16,6 @@ Matrix Camera::getViewMatrix()
 	rotZ.SetRotationZ(-1 * m_transform.rotation.z);
 	translate.SetTranslation(m_transform.position * -1);
 	view = view * translate * rotY * rotX * rotZ;
-	/*Matrix w = view;
-
-	printf("view is: \n%f, %f, %f, %f, \n%f, %f, %f, %f, \n%f, %f, %f, %f, \n%f, %f, %f, %f\n",
-		w.m[0][0], w.m[0][1], w.m[0][2], w.m[0][3],
-		w.m[1][0], w.m[1][1], w.m[1][2], w.m[1][3],
-		w.m[2][0], w.m[2][1], w.m[2][2], w.m[2][3],
-		w.m[3][0], w.m[3][1], w.m[3][2], w.m[3][3]);*/
 	return view;
 }
 
@@ -31,13 +24,6 @@ Matrix Camera::getProjectionMatrix()
 	Matrix proj;
 	proj.SetIdentity();
 	proj.SetPerspective(fovY, aspectRatio, nearPlane, farPlane);
-	/*Matrix w = proj;
-
-	printf("perspective is: \n%f, %f, %f, %f, \n%f, %f, %f, %f, \n%f, %f, %f, %f, \n%f, %f, %f, %f\n",
-		w.m[0][0], w.m[0][1], w.m[0][2], w.m[0][3],
-		w.m[1][0], w.m[1][1], w.m[1][2], w.m[1][3],
-		w.m[2][0], w.m[2][1], w.m[2][2], w.m[2][3],
-		w.m[3][0], w.m[3][1], w.m[3][2], w.m[3][3]);*/
 	return proj;
 }
 
@@ -55,4 +41,52 @@ void Camera::drawAllObject()
 		Object3D* targetObj = *it;
 		targetObj->draw(getProjectionMatrix(), getViewMatrix());
 	}
+}
+
+void Camera::moveX(float delta)
+{
+	Matrix rotX, rotY, rotZ;
+	Vector4 movementVector;
+	movementVector.x = delta; movementVector.w = 1; rotX.SetIdentity();
+	rotY.SetIdentity(); rotZ.SetIdentity();
+	rotX.SetRotationX(m_transform.rotation.x);
+	rotY.SetRotationY(m_transform.rotation.y);
+	rotZ.SetRotationZ(m_transform.rotation.z);
+
+	movementVector = movementVector * rotZ * rotX * rotY;
+	setPosition(m_transform.position.x + movementVector.x, 
+		m_transform.position.y + movementVector.y, 
+		m_transform.position.z + movementVector.z);
+}
+
+void Camera::moveY(float delta)
+{
+	Matrix rotX, rotY, rotZ;
+	Vector4 movementVector;
+	movementVector.y = delta; movementVector.w = 1; rotX.SetIdentity();
+	rotY.SetIdentity(); rotZ.SetIdentity();
+	rotX.SetRotationX(m_transform.rotation.x);
+	rotY.SetRotationY(m_transform.rotation.y);
+	rotZ.SetRotationZ(m_transform.rotation.z);
+
+	movementVector = movementVector * rotZ * rotX * rotY;
+	setPosition(m_transform.position.x + movementVector.x,
+		m_transform.position.y + movementVector.y,
+		m_transform.position.z + movementVector.z);
+}
+
+void Camera::moveZ(float delta)
+{
+	Matrix rotX, rotY, rotZ;
+	Vector4 movementVector;
+	movementVector.z = delta; movementVector.w = 1; rotX.SetIdentity();
+	rotY.SetIdentity(); rotZ.SetIdentity();
+	rotX.SetRotationX(m_transform.rotation.x);
+	rotY.SetRotationY(m_transform.rotation.y);
+	rotZ.SetRotationZ(m_transform.rotation.z);
+
+	movementVector = movementVector * rotZ * rotX * rotY;
+	setPosition(m_transform.position.x + movementVector.x,
+		m_transform.position.y + movementVector.y,
+		m_transform.position.z + movementVector.z);
 }

@@ -16,7 +16,7 @@ Shaders		myShaders;
 Camera* cam;
 Object3D* woman1;
 Object3D* woman2;
-bool keys[8];
+bool keys[8]; // Condition of keys (pressed or not)
 
 int Init(ESContext* esContext)
 {
@@ -68,13 +68,13 @@ void Update( ESContext *esContext, float deltaTime )
 	woman2->rotateZ(w2rotation);
 
 	if (keys[0] && !keys[1])
-		cam->translateZ(cam->getPosition().z + deltaTime);
+		cam->moveZ(deltaTime);
 	if (!keys[0] && keys[1])
-		cam->translateZ(cam->getPosition().z - deltaTime);
+		cam->moveZ(-deltaTime);
 	if (keys[2] && !keys[3])
-		cam->translateX(cam->getPosition().x - deltaTime);
+		cam->moveX(-deltaTime);
 	if (!keys[2] && keys[3])
-		cam->translateX(cam->getPosition().x + deltaTime);
+		cam->moveX(deltaTime);
 	if (keys[4] && !keys[5])
 		cam->rotateY(cam->getRotation().y + deltaTime);
 	if (!keys[4] && keys[5])

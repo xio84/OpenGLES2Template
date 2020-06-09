@@ -148,26 +148,9 @@ void Object3D::draw(Matrix& proj, Matrix& view)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glUniform1i(m_pShaders->GetUniforms().texture, 0);
 
-	/*Matrix w = GetWorldMatrix();
-
-	printf("wm is: \n%f, %f, %f, %f, \n%f, %f, %f, %f, \n%f, %f, %f, %f, \n%f, %f, %f, %f\n",
-		w.m[0][0], w.m[0][1], w.m[0][2], w.m[0][3],
-		w.m[1][0], w.m[1][1], w.m[1][2], w.m[1][3],
-		w.m[2][0], w.m[2][1], w.m[2][2], w.m[2][3],
-		w.m[3][0], w.m[3][1], w.m[3][2], w.m[3][3]);*/
-
-	//glUniformMatrix4fv(m_pShaders->GetUniforms().world, 1, false, getWorldMatrix().m[0]);
-
 	Matrix wvp;
 	wvp.SetIdentity();
 	wvp = getWorldMatrix() * view * proj;
-	/*Matrix w = wvp;
-
-	printf("wvp is: \n%f, %f, %f, %f, \n%f, %f, %f, %f, \n%f, %f, %f, %f, \n%f, %f, %f, %f\n",
-		w.m[0][0], w.m[0][1], w.m[0][2], w.m[0][3],
-		w.m[1][0], w.m[1][1], w.m[1][2], w.m[1][3],
-		w.m[2][0], w.m[2][1], w.m[2][2], w.m[2][3],
-		w.m[3][0], w.m[3][1], w.m[3][2], w.m[3][3]);*/
 	glUniformMatrix4fv(m_pShaders->GetUniforms().wvp, 1, false, wvp.m[0]);
 
 
