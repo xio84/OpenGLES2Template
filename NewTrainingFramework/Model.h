@@ -2,7 +2,8 @@
 #include "../Utilities/utilities.h" // if you use STL, please include this line AFTER all other include
 class Model {
 public:
-	GLuint m_VBO, m_IBO; 
+	GLuint m_VBO, m_IBO;
+	Vector3 offsetPos;
 	unsigned int m_indicesCount, m_verticesCount;
 	Model(); 
 	~Model();

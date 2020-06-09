@@ -3,6 +3,9 @@
 
 Model::Model()
 {
+	offsetPos.x = 0;
+	offsetPos.y = 0;
+	offsetPos.z = 0;
 	glGenBuffers(1, &m_VBO);
 	glGenBuffers(1, &m_IBO);
 }
@@ -16,7 +19,7 @@ Model::~Model()
 void Model::InitModel(char* filename)
 {
 	int buffer;
-	FILE* file = fopen("../Resources/Models/Woman1.nfg", "r");
+	FILE* file = fopen(filename, "r");
 	if (file == NULL) {
 		printf("Impossible to open the file !\n");
 	}
@@ -33,7 +36,10 @@ void Model::InitModel(char* filename)
 				&verticesData[i].binormal.x, &verticesData[i].binormal.y, &verticesData[i].binormal.z,
 				&verticesData[i].tangent.x, &verticesData[i].tangent.y, &verticesData[i].tangent.z,
 				&verticesData[i].uv.x, &verticesData[i].uv.y);
-			// Texture mapping has not been implemented,
+			// Offset position
+			verticesData[i].pos.x += offsetPos.x;
+			verticesData[i].pos.y += offsetPos.y;
+			verticesData[i].pos.z += offsetPos.z;
 			// All color is set to green
 			printf("Vertex %d scanned, values: %f %f %f, %f %f %f, %f %f %f, %f %f %f, %f %f\n", buffer,
 				verticesData[i].pos.x, verticesData[i].pos.y, verticesData[i].pos.z,

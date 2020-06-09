@@ -9,11 +9,17 @@
 #include <conio.h>
 #include "Model.h"
 #include "Texture.h"
+#include "Object3D.h"
 
 Shaders		myShaders;
 Vertex		*verticesData;
 Model		*targetModel;
+Model* targetModel2;
 Texture		*targetTexture;
+Texture* targetTexture2;
+int iTextureLoc;
+Object3D* woman1;
+Object3D* woman2;
 
 int Init(ESContext* esContext)
 {
@@ -40,27 +46,24 @@ int Init(ESContext* esContext)
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 
-	// Setup Texture
-	targetTexture = new Texture;
-	targetTexture->InitTexture("../Resources/Textures/Woman1.tga");
+	//// Setup Texture
+	//targetTexture = new Texture;
+	//targetTexture->InitTexture("../Resources/Textures/Woman1.tga");
+	//targetTexture2 = new Texture;
+	//targetTexture2->InitTexture("../Resources/Textures/Woman2.tga");
 
-	// Setting texture parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	// Setting texture uniform
-	glBindTexture(GL_TEXTURE_2D, targetTexture->textureID);
-	int iTextureLoc = glGetUniformLocation(myShaders.GetProgram(), "u_texture");
-	glUniform1i(iTextureLoc, 0);
-
-	// Reading data
-	targetModel = new Model;
-	targetModel->InitModel("../Resources/Models/Woman1.nfg");
+	//// Reading data
+	//targetModel = new Model;
+	//targetModel->offsetPos.x = -0.7;
+	//targetModel->InitModel("../Resources/Models/Woman1.nfg");
+	//targetModel2 = new Model;
+	//targetModel2->offsetPos.x = 0.7;
+	//targetModel2->InitModel("../Resources/Models/Woman2.nfg");
 
 	//creation of shaders and program 
 	myShaders.Init("../Resources/Shaders/TriangleShaderVS.vs", "../Resources/Shaders/TriangleShaderFS.fs");
+	woman1 = new Object3D("../Resources/Textures/Woman1.tga", "../Resources/Models/Woman1.nfg", &myShaders);
+	woman2 = new Object3D("../Resources/Textures/Woman2.tga", "../Resources/Models/Woman2.nfg", &myShaders);
 	return 0;
 }
 
@@ -70,31 +73,45 @@ void Draw(ESContext* esContext)
 
 	glUseProgram(myShaders.GetProgram());
 
-	glBindBuffer(GL_ARRAY_BUFFER, targetModel->m_VBO);
+	woman1->draw();
+	woman2->draw();
 
-	if (myShaders.GetAttributes().position != -1)
-	{
-		glEnableVertexAttribArray(myShaders.GetAttributes().position);
-		glVertexAttribPointer(myShaders.GetAttributes().position, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-	}
+	//// Setting texture uniform
+	////glBindTexture(GL_TEXTURE_2D, targetTexture->textureID);
+	//targetTexture2->ActivateTexture();
+	//// Setting texture parameters
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//iTextureLoc = glGetUniformLocation(myShaders.GetProgram(), "u_texture");
+	//glUniform1i(iTextureLoc, 0);
 
-	if (myShaders.GetAttributes().uv != -1)
-	{
-		glEnableVertexAttribArray(myShaders.GetAttributes().uv);
-		glVertexAttribPointer(myShaders.GetAttributes().uv, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (char*)0 + (sizeof(Vector3) * 4));
-	}
-	else {
-		printf("No Color!\n");
-	}
+	//glBindBuffer(GL_ARRAY_BUFFER, targetModel2->m_VBO);
+
+	//if (myShaders.GetAttributes().position != -1)
+	//{
+	//	glEnableVertexAttribArray(myShaders.GetAttributes().position);
+	//	glVertexAttribPointer(myShaders.GetAttributes().position, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+	//}
+
+	//if (myShaders.GetAttributes().uv != -1)
+	//{
+	//	glEnableVertexAttribArray(myShaders.GetAttributes().uv);
+	//	glVertexAttribPointer(myShaders.GetAttributes().uv, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (char*)0 + (sizeof(Vector3) * 4));
+	//}
+	//else {
+	//	printf("No Color!\n");
+	//}
 
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, targetModel->m_IBO);
-	if (targetModel->m_indicesCount) glDrawElements(GL_TRIANGLES, targetModel->m_indicesCount, GL_UNSIGNED_INT, 0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, targetModel2->m_IBO);
+	//if (targetModel2->m_indicesCount) glDrawElements(GL_TRIANGLES, targetModel2->m_indicesCount, GL_UNSIGNED_INT, 0);
 
-	//glDrawArrays( GL_TRIANGLES, 0, 3 );
+	////glDrawArrays( GL_TRIANGLES, 0, 3 );
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	eglSwapBuffers(esContext->eglDisplay, esContext->eglSurface);
 }

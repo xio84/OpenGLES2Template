@@ -15,8 +15,12 @@ Texture::~Texture()
 void Texture::InitTexture(char* filename)
 {
 	// Bind and load Texture data
-	glBindTexture(GL_TEXTURE_2D, textureID);
 	imageData = LoadTGA(filename, &width, &height, &bpp);
+}
+
+void Texture::ActivateTexture()
+{
+	glBindTexture(GL_TEXTURE_2D, textureID);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
 		GL_RGB, GL_UNSIGNED_BYTE, imageData);
 }

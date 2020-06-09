@@ -11,7 +11,10 @@ public:
 	};
 
 	struct Uniforms
-	{};
+	{
+		GLint texture;
+		GLint world;
+	};
 
 private:
 	GLuint		m_program;

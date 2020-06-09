@@ -9,5 +9,6 @@ public:
 	Texture();
 	~Texture();
 	void InitTexture(char* filename);
+	void ActivateTexture();
 };
 
