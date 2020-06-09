@@ -62,19 +62,17 @@ void Object3D::setRotation(float x, float y, float z)
 
 void Object3D::rotateX(float degrees)
 {
-	degrees = (degrees > 360) ? 0 : degrees;
 	m_transform.rotation.x = degrees;
 }
 
 void Object3D::rotateY(float degrees)
 {
-	degrees = (degrees > 360) ? 0 : degrees;
 	m_transform.rotation.y = degrees;
+	//printf("yrot is: %f\n", m_transform.rotation.y);
 }
 
 void Object3D::rotateZ(float degrees)
 {
-	degrees = (degrees > 360) ? 0 : degrees;
 	m_transform.rotation.z = degrees;
 }
 
@@ -115,12 +113,20 @@ Matrix Object3D::GetWorldMatrix()
 	// Set matrices as appropriate
 	scale.SetScale(m_transform.scale);
 	rotX.SetRotationX(m_transform.rotation.x);
-	rotX.SetRotationY(m_transform.rotation.y);
-	rotX.SetRotationZ(m_transform.rotation.z);
+	rotY.SetRotationY(m_transform.rotation.y);
+	rotZ.SetRotationZ(m_transform.rotation.z);
 	translate.SetTranslation(m_transform.position);
 
+	Matrix w = rotY;
+
+	printf("wm is: \n%f, %f, %f, %f, \n%f, %f, %f, %f, \n%f, %f, %f, %f, \n%f, %f, %f, %f\n",
+		w.m[0][0], w.m[0][1], w.m[0][2], w.m[0][3],
+		w.m[1][0], w.m[1][1], w.m[1][2], w.m[1][3],
+		w.m[2][0], w.m[2][1], w.m[2][2], w.m[2][3],
+		w.m[3][0], w.m[3][1], w.m[3][2], w.m[3][3]);
+
 	// Set world as appropriate
-	world = translate * rotY * rotX * rotY * scale * world;
+	world = scale * rotZ * rotX * rotY * translate;
 	return world;
 }
 

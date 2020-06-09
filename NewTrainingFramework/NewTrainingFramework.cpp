@@ -34,8 +34,10 @@ int Init(ESContext* esContext)
 	woman2 = new Object3D("../Resources/Textures/Woman2.tga", "../Resources/Models/Woman2.nfg", &myShaders);
 
 	// Moving the objects
-	woman1->translateX(-0.8);
-	woman2->translateX(1);
+	woman1->translateX(-0.5);
+	woman2->translateX(0.5);
+
+	woman1->rotateY(60);
 
 	// Scaling the objects
 	woman1->uniformScale(0.5);
@@ -58,7 +60,9 @@ void Draw(ESContext* esContext)
 
 void Update( ESContext *esContext, float deltaTime )
 {
-
+	int slow = 1;
+	float w1rotation = woman1->getRotation().y + (deltaTime / slow);
+	woman1->rotateY(w1rotation);
 }
 
 void Key( ESContext *esContext, unsigned char key, bool bIsPressed )
