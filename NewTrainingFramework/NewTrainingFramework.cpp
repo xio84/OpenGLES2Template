@@ -34,8 +34,13 @@ int Init(ESContext* esContext)
 	woman2 = new Object3D("../Resources/Textures/Woman2.tga", "../Resources/Models/Woman2.nfg", &myShaders);
 
 	// Moving the objects
-	woman1->translateX(-0.3);
-	woman2->translateX(0.3);
+	woman1->translateX(-0.8);
+	woman2->translateX(1);
+
+	// Scaling the objects
+	woman1->uniformScale(0.5);
+	woman2->uniformScale(0.35);
+
 	return 0;
 }
 
