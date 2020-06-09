@@ -63,6 +63,8 @@ void Update( ESContext *esContext, float deltaTime )
 	int slow = 1;
 	float w1rotation = woman1->getRotation().y + (deltaTime / slow);
 	woman1->rotateY(w1rotation);
+	float w2rotation = woman2->getRotation().z + (deltaTime / slow);
+	woman2->rotateZ(w2rotation);
 }
 
 void Key( ESContext *esContext, unsigned char key, bool bIsPressed )
