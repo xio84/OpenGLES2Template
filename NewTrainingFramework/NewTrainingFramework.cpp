@@ -16,6 +16,7 @@ Shaders		myShaders;
 Camera* cam;
 Object3D* woman1;
 Object3D* woman2;
+bool keys[8];
 
 int Init(ESContext* esContext)
 {
@@ -65,6 +66,23 @@ void Update( ESContext *esContext, float deltaTime )
 	woman1->rotateY(w1rotation);
 	float w2rotation = woman2->getRotation().z + (deltaTime / slow);
 	woman2->rotateZ(w2rotation);
+
+	if (keys[0] && !keys[1])
+		cam->translateZ(cam->getPosition().z + deltaTime);
+	if (!keys[0] && keys[1])
+		cam->translateZ(cam->getPosition().z - deltaTime);
+	if (keys[2] && !keys[3])
+		cam->translateX(cam->getPosition().x - deltaTime);
+	if (!keys[2] && keys[3])
+		cam->translateX(cam->getPosition().x + deltaTime);
+	if (keys[4] && !keys[5])
+		cam->rotateY(cam->getRotation().y + deltaTime);
+	if (!keys[4] && keys[5])
+		cam->rotateY(cam->getRotation().y - deltaTime);
+	if (keys[6] && !keys[7])
+		cam->rotateX(cam->getRotation().x + deltaTime);
+	if (!keys[6] && keys[7])
+		cam->rotateX(cam->getRotation().x - deltaTime);
 	/*float w2rotationx = woman2->getRotation().x + (deltaTime / slow);
 	woman2->rotateX(w2rotationx);*/
 }
@@ -75,28 +93,56 @@ void Key( ESContext *esContext, unsigned char key, bool bIsPressed )
 	if (bIsPressed) {
 		switch (key) {
 		case 'S':
-			cam->translateZ(cam->getPosition().z + 0.01);
+			keys[0] = true;
 			break;
 		case 'W':
-			cam->translateZ(cam->getPosition().z - 0.01);
+			keys[1] = true;
 			break;
 		case 'A':
-			cam->translateX(cam->getPosition().x - 0.01);
+			keys[2] = true;
 			break;
 		case 'D':
-			cam->translateX(cam->getPosition().x + 0.01);
+			keys[3] = true;
 			break;
 		case 'Q':
-			cam->rotateY(cam->getRotation().y + 0.01);
+			keys[4] = true;
 			break;
 		case 'E':
-			cam->rotateY(cam->getRotation().y - 0.01);
+			keys[5] = true;
 			break;
 		case 'U':
-			cam->rotateX(cam->getRotation().x + 0.01);
+			keys[6] = true;
 			break;
 		case 'I':
-			cam->rotateX(cam->getRotation().x - 0.01);
+			keys[7] = true;
+			break;
+		}
+	}
+	else {
+		switch (key) {
+		case 'S':
+			keys[0] = false;
+			break;
+		case 'W':
+			keys[1] = false;
+			break;
+		case 'A':
+			keys[2] = false;
+			break;
+		case 'D':
+			keys[3] = false;
+			break;
+		case 'Q':
+			keys[4] = false;
+			break;
+		case 'E':
+			keys[5] = false;
+			break;
+		case 'U':
+			keys[6] = false;
+			break;
+		case 'I':
+			keys[7] = false;
 			break;
 		}
 	}
