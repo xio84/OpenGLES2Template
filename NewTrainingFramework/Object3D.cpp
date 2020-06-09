@@ -127,7 +127,6 @@ Matrix Object3D::GetWorldMatrix()
 void Object3D::draw()
 {
 	// Setting texture uniform
-	//glBindTexture(GL_TEXTURE_2D, targetTexture->textureID);
 	m_pTexture->ActivateTexture();
 	// Setting texture parameters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -166,8 +165,6 @@ void Object3D::draw()
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_pModel->m_IBO);
 	if (m_pModel->m_indicesCount) glDrawElements(GL_TRIANGLES, m_pModel->m_indicesCount, GL_UNSIGNED_INT, 0);
-
-	//glDrawArrays( GL_TRIANGLES, 0, 3 );
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

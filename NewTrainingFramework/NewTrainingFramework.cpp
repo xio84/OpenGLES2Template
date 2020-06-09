@@ -25,45 +25,17 @@ int Init(ESContext* esContext)
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-	//triangle data
-	/*verticesData[0].pos = Vector3(0.5,  0.5,  0.0);
-	verticesData[1].pos = Vector3( -0.5, 0.5,  0.0 );
-	verticesData[2].pos = Vector3(  -0.5, -0.5,  0.0 );
-	verticesData[3].pos = Vector3(0.5, -0.5, 0.0);
-
-	verticesData[0].color = Vector4(0.0, 1.0, 0.0, 0.5);
-	verticesData[1].color = Vector4(1.0, 0.0, 0.0, 0.5);
-	verticesData[2].color = Vector4(1.0, 1.0, 1.0, 0.5);
-	verticesData[3].color = Vector4(0.0, 0.0, 1.0, 0.5);
-
-	pindices[0] = 1;
-	pindices[1] = 2;
-	pindices[2] = 3;
-	pindices[3] = 0;
-	pindices[4] = 1;
-	pindices[5] = 3;*/
-
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
-
-	//// Setup Texture
-	//targetTexture = new Texture;
-	//targetTexture->InitTexture("../Resources/Textures/Woman1.tga");
-	//targetTexture2 = new Texture;
-	//targetTexture2->InitTexture("../Resources/Textures/Woman2.tga");
-
-	//// Reading data
-	//targetModel = new Model;
-	//targetModel->offsetPos.x = -0.7;
-	//targetModel->InitModel("../Resources/Models/Woman1.nfg");
-	//targetModel2 = new Model;
-	//targetModel2->offsetPos.x = 0.7;
-	//targetModel2->InitModel("../Resources/Models/Woman2.nfg");
 
 	//creation of shaders and program 
 	myShaders.Init("../Resources/Shaders/TriangleShaderVS.vs", "../Resources/Shaders/TriangleShaderFS.fs");
 	woman1 = new Object3D("../Resources/Textures/Woman1.tga", "../Resources/Models/Woman1.nfg", &myShaders);
 	woman2 = new Object3D("../Resources/Textures/Woman2.tga", "../Resources/Models/Woman2.nfg", &myShaders);
+
+	// Moving the objects
+	woman1->translateX(-0.3);
+	woman2->translateX(0.3);
 	return 0;
 }
 
@@ -75,43 +47,6 @@ void Draw(ESContext* esContext)
 
 	woman1->draw();
 	woman2->draw();
-
-	//// Setting texture uniform
-	////glBindTexture(GL_TEXTURE_2D, targetTexture->textureID);
-	//targetTexture2->ActivateTexture();
-	//// Setting texture parameters
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//iTextureLoc = glGetUniformLocation(myShaders.GetProgram(), "u_texture");
-	//glUniform1i(iTextureLoc, 0);
-
-	//glBindBuffer(GL_ARRAY_BUFFER, targetModel2->m_VBO);
-
-	//if (myShaders.GetAttributes().position != -1)
-	//{
-	//	glEnableVertexAttribArray(myShaders.GetAttributes().position);
-	//	glVertexAttribPointer(myShaders.GetAttributes().position, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-	//}
-
-	//if (myShaders.GetAttributes().uv != -1)
-	//{
-	//	glEnableVertexAttribArray(myShaders.GetAttributes().uv);
-	//	glVertexAttribPointer(myShaders.GetAttributes().uv, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (char*)0 + (sizeof(Vector3) * 4));
-	//}
-	//else {
-	//	printf("No Color!\n");
-	//}
-
-
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, targetModel2->m_IBO);
-	//if (targetModel2->m_indicesCount) glDrawElements(GL_TRIANGLES, targetModel2->m_indicesCount, GL_UNSIGNED_INT, 0);
-
-	////glDrawArrays( GL_TRIANGLES, 0, 3 );
-
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	eglSwapBuffers(esContext->eglDisplay, esContext->eglSurface);
 }
