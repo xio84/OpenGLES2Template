@@ -71,7 +71,35 @@ void Update( ESContext *esContext, float deltaTime )
 
 void Key( ESContext *esContext, unsigned char key, bool bIsPressed )
 {
-
+	printf("%c is pressed\n", key);
+	if (bIsPressed) {
+		switch (key) {
+		case 'S':
+			cam->translateZ(cam->getPosition().z + 0.01);
+			break;
+		case 'W':
+			cam->translateZ(cam->getPosition().z - 0.01);
+			break;
+		case 'A':
+			cam->translateX(cam->getPosition().x - 0.01);
+			break;
+		case 'D':
+			cam->translateX(cam->getPosition().x + 0.01);
+			break;
+		case 'Q':
+			cam->rotateY(cam->getRotation().y + 0.01);
+			break;
+		case 'E':
+			cam->rotateY(cam->getRotation().y - 0.01);
+			break;
+		case 'U':
+			cam->rotateX(cam->getRotation().x + 0.01);
+			break;
+		case 'I':
+			cam->rotateX(cam->getRotation().x - 0.01);
+			break;
+		}
+	}
 }
 
 void CleanUp()
