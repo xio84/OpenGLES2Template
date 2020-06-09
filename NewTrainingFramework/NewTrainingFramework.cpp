@@ -10,14 +10,10 @@
 #include "Model.h"
 #include "Texture.h"
 #include "Object3D.h"
+#include "Camera.h"
 
 Shaders		myShaders;
-Vertex		*verticesData;
-Model		*targetModel;
-Model* targetModel2;
-Texture		*targetTexture;
-Texture* targetTexture2;
-int iTextureLoc;
+Camera* cam;
 Object3D* woman1;
 Object3D* woman2;
 
@@ -30,8 +26,12 @@ int Init(ESContext* esContext)
 
 	//creation of shaders and program 
 	myShaders.Init("../Resources/Shaders/TriangleShaderVS.vs", "../Resources/Shaders/TriangleShaderFS.fs");
-	woman1 = new Object3D("../Resources/Textures/Woman1.tga", "../Resources/Models/Woman1.nfg", &myShaders);
-	woman2 = new Object3D("../Resources/Textures/Woman2.tga", "../Resources/Models/Woman2.nfg", &myShaders);
+
+	// Creation of camera and objects
+	cam = new Camera(&myShaders);
+	woman1 = cam->addObjectsToDraw("../Resources/Textures/Woman1.tga", "../Resources/Models/Woman1.nfg");
+	woman2 = cam->addObjectsToDraw("../Resources/Textures/Woman2.tga", "../Resources/Models/Woman2.nfg");
+	//woman1 = new Object3D("../Resources/Textures/Woman1.tga", "../Resources/Models/Woman1.nfg", &myShaders);
 
 	// Moving the objects
 	woman1->translateX(-0.1);
@@ -53,8 +53,7 @@ void Draw(ESContext* esContext)
 
 	glUseProgram(myShaders.GetProgram());
 
-	woman1->draw();
-	woman2->draw();
+	cam->drawAllObject();
 
 	eglSwapBuffers(esContext->eglDisplay, esContext->eglSurface);
 }

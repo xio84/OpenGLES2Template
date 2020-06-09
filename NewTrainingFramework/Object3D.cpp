@@ -103,7 +103,7 @@ Vector3 Object3D::getScale()
 	return m_transform.scale;
 }
 
-Matrix Object3D::GetWorldMatrix()
+Matrix Object3D::getWorldMatrix()
 {
 	Matrix world, scale, rotX, rotY, rotZ, translate;
 	// Set as identity matrices
@@ -117,20 +117,27 @@ Matrix Object3D::GetWorldMatrix()
 	rotZ.SetRotationZ(m_transform.rotation.z);
 	translate.SetTranslation(m_transform.position);
 
-	Matrix w = rotY;
+	/*Matrix w = rotY;
 
 	printf("wm is: \n%f, %f, %f, %f, \n%f, %f, %f, %f, \n%f, %f, %f, %f, \n%f, %f, %f, %f\n",
 		w.m[0][0], w.m[0][1], w.m[0][2], w.m[0][3],
 		w.m[1][0], w.m[1][1], w.m[1][2], w.m[1][3],
 		w.m[2][0], w.m[2][1], w.m[2][2], w.m[2][3],
-		w.m[3][0], w.m[3][1], w.m[3][2], w.m[3][3]);
+		w.m[3][0], w.m[3][1], w.m[3][2], w.m[3][3]);*/
 
 	// Set world as appropriate
-	world = scale * rotZ * rotX * rotY * translate;
+	world = world * scale * rotZ * rotX * rotY * translate;
 	return world;
 }
 
 void Object3D::draw()
+{
+	Matrix proj, view;
+	proj.SetIdentity(); view.SetIdentity();
+	draw(proj, view);
+}
+
+void Object3D::draw(Matrix& proj, Matrix& view)
 {
 	// Setting texture uniform
 	m_pTexture->ActivateTexture();
@@ -149,7 +156,20 @@ void Object3D::draw()
 		w.m[2][0], w.m[2][1], w.m[2][2], w.m[2][3],
 		w.m[3][0], w.m[3][1], w.m[3][2], w.m[3][3]);*/
 
-	glUniformMatrix4fv(m_pShaders->GetUniforms().world, 1, false, GetWorldMatrix().m[0]);
+	//glUniformMatrix4fv(m_pShaders->GetUniforms().world, 1, false, getWorldMatrix().m[0]);
+
+	Matrix wvp;
+	wvp.SetIdentity();
+	wvp = getWorldMatrix() * view * proj;
+	Matrix w = wvp;
+
+	printf("wvp is: \n%f, %f, %f, %f, \n%f, %f, %f, %f, \n%f, %f, %f, %f, \n%f, %f, %f, %f\n",
+		w.m[0][0], w.m[0][1], w.m[0][2], w.m[0][3],
+		w.m[1][0], w.m[1][1], w.m[1][2], w.m[1][3],
+		w.m[2][0], w.m[2][1], w.m[2][2], w.m[2][3],
+		w.m[3][0], w.m[3][1], w.m[3][2], w.m[3][3]);
+	glUniformMatrix4fv(m_pShaders->GetUniforms().wvp, 1, false, wvp.m[0]);
+
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_pModel->m_VBO);
 

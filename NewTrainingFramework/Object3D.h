@@ -13,7 +13,7 @@ struct Transform
 
 class Object3D
 {
-private:
+protected:
 	Model* m_pModel;
 	Texture* m_pTexture;
 	Shaders* m_pShaders;
@@ -45,9 +45,10 @@ public:
 	Vector3 getPosition();
 	Vector3 getRotation();
 	Vector3 getScale();
-	Matrix GetWorldMatrix();
+	Matrix getWorldMatrix();
 
 	// Others
 	void draw();
+	void draw(Matrix &proj, Matrix &view);
 };
 
