@@ -21,8 +21,10 @@ public:
     Object3D* addObjectsToDraw(char* tgaFile, char* nfgFile);
 
     void drawAllObject();
+    void move(float x, float y, float z);
     void moveX(float delta);
     void moveY(float delta);
     void moveZ(float delta);
+    void rotate(float x, float y, float z);
 };
 

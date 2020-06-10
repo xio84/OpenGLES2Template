@@ -43,50 +43,51 @@ void Camera::drawAllObject()
 	}
 }
 
-void Camera::moveX(float delta)
+void Camera::move(float x, float y, float z)
 {
 	Matrix rotX, rotY, rotZ;
 	Vector4 movementVector;
-	movementVector.x = delta; movementVector.w = 1; rotX.SetIdentity();
+	movementVector.x = x; movementVector.y = y; movementVector.z = z;
+	movementVector.w = 1; rotX.SetIdentity();
 	rotY.SetIdentity(); rotZ.SetIdentity();
 	rotX.SetRotationX(m_transform.rotation.x);
 	rotY.SetRotationY(m_transform.rotation.y);
 	rotZ.SetRotationZ(m_transform.rotation.z);
 
 	movementVector = movementVector * rotZ * rotX * rotY;
-	setPosition(m_transform.position.x + movementVector.x, 
-		m_transform.position.y + movementVector.y, 
+	setPosition(m_transform.position.x + movementVector.x,
+		m_transform.position.y + movementVector.y,
 		m_transform.position.z + movementVector.z);
+}
+
+void Camera::moveX(float delta)
+{
+	move(delta, 0, 0);
 }
 
 void Camera::moveY(float delta)
 {
-	Matrix rotX, rotY, rotZ;
-	Vector4 movementVector;
-	movementVector.y = delta; movementVector.w = 1; rotX.SetIdentity();
-	rotY.SetIdentity(); rotZ.SetIdentity();
-	rotX.SetRotationX(m_transform.rotation.x);
-	rotY.SetRotationY(m_transform.rotation.y);
-	rotZ.SetRotationZ(m_transform.rotation.z);
-
-	movementVector = movementVector * rotZ * rotX * rotY;
-	setPosition(m_transform.position.x + movementVector.x,
-		m_transform.position.y + movementVector.y,
-		m_transform.position.z + movementVector.z);
+	move(0, delta, 0);
 }
 
 void Camera::moveZ(float delta)
 {
+	move(0, 0, delta);
+}
+
+void Camera::rotate(float x, float y, float z)
+{
 	Matrix rotX, rotY, rotZ;
-	Vector4 movementVector;
-	movementVector.z = delta; movementVector.w = 1; rotX.SetIdentity();
+	Vector4 rotationVector;
+	rotationVector.x = x; rotationVector.y = y; rotationVector.z = z;
+	rotationVector.w = 1; rotX.SetIdentity();
 	rotY.SetIdentity(); rotZ.SetIdentity();
 	rotX.SetRotationX(m_transform.rotation.x);
 	rotY.SetRotationY(m_transform.rotation.y);
 	rotZ.SetRotationZ(m_transform.rotation.z);
 
-	movementVector = movementVector * rotZ * rotX * rotY;
-	setPosition(m_transform.position.x + movementVector.x,
-		m_transform.position.y + movementVector.y,
-		m_transform.position.z + movementVector.z);
+	rotationVector = rotationVector * rotZ * rotX * rotY;
+	setRotation(m_transform.rotation.x + rotationVector.x,
+		m_transform.rotation.y + rotationVector.y,
+		m_transform.rotation.z + rotationVector.z);
 }
