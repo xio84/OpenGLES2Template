@@ -7,8 +7,8 @@ public:
 	char*		imageData;
 	int			width, height, bpp;
 	Texture();
-	~Texture();
-	void InitTexture(char* filename);
-	void ActivateTexture();
+	virtual ~Texture();
+	virtual void InitTexture(char* filename);
+	virtual void ActivateTexture();
 };
 

@@ -19,6 +19,18 @@ Matrix Camera::getViewMatrix()
 	return view;
 }
 
+Matrix Camera::getSkyViewMatrix()
+{
+	Matrix view, rotX, rotY, rotZ, translate;
+	view.SetIdentity(); rotX.SetIdentity();
+	rotY.SetIdentity(); rotZ.SetIdentity(); translate.SetIdentity();
+	rotX.SetRotationX(-1 * m_transform.rotation.x);
+	rotY.SetRotationY(-1 * m_transform.rotation.y);
+	rotZ.SetRotationZ(-1 * m_transform.rotation.z);
+	view = view * rotY * rotX * rotZ;
+	return view;
+}
+
 Matrix Camera::getProjectionMatrix()
 {
 	Matrix proj;
@@ -34,8 +46,58 @@ Object3D* Camera::addObjectsToDraw(char* tgaFile, char* nfgFile)
 	return target;
 }
 
+void Camera::setSkybox(SkyboxShaders* targetSShaders, SkyboxTexture* targetSTexture, char* filename)
+{
+	m_pSkyboxShaders = targetSShaders;
+	m_pSkyboxTexture = targetSTexture;
+	m_pSkyboxModel = new Model();
+	m_pSkyboxModel->InitModel(filename);
+}
+
 void Camera::drawAllObject()
 {
+	glDisable(GL_DEPTH_TEST);
+
+	if (m_pSkyboxShaders != 0 && m_pSkyboxModel != 0 && m_pSkyboxTexture != 0) {
+		// skybox
+		m_pSkyboxTexture->ActivateTexture();
+
+		glUseProgram(m_pSkyboxShaders->GetProgram());
+
+		glUniform1i(m_pSkyboxShaders->GetUniforms().texture, 0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_pSkyboxModel->m_VBO);
+
+		Matrix MVPMatrix3 = getSkyViewMatrix() * getProjectionMatrix();
+		if (m_pSkyboxShaders->GetUniforms().wvp != -1) {
+			glUniformMatrix4fv(m_pSkyboxShaders->GetUniforms().wvp, 1, GL_FALSE, MVPMatrix3.m[0]);
+		}
+		else {
+			printf("no sky wvp matrix!");
+		}
+
+		if (m_pSkyboxShaders->GetAttributes().position != -1)
+		{
+			glEnableVertexAttribArray(m_pSkyboxShaders->GetAttributes().position);
+			glVertexAttribPointer(m_pSkyboxShaders->GetAttributes().position, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+		}
+		else {
+			printf("no sky pos matrix!");
+		}
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_pSkyboxModel->m_IBO);
+
+		glDrawElements(GL_TRIANGLES, m_pSkyboxModel->m_indicesCount, GL_UNSIGNED_INT, 0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	}
+	else {
+		printf("skybox error!");
+	}
+	glEnable(GL_DEPTH_TEST);
+	glUseProgram(m_pShaders->GetProgram());
 	for (std::vector<Object3D*>::iterator it = objectsToDraw.begin();
 		it != objectsToDraw.end(); it++) {
 		Object3D* targetObj = *it;

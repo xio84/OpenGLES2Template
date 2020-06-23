@@ -142,10 +142,6 @@ void Object3D::draw(Matrix& proj, Matrix& view)
 	// Setting texture uniform
 	m_pTexture->ActivateTexture();
 	// Setting texture parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glUniform1i(m_pShaders->GetUniforms().texture, 0);
 
 	Matrix wvp;

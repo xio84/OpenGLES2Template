@@ -13,6 +13,8 @@
 #include "Camera.h"
 
 Shaders		myShaders;
+SkyboxShaders	skyboxShaders;
+SkyboxTexture	skyboxTexture;
 Camera* cam;
 Object3D* woman1;
 Object3D* woman2;
@@ -27,9 +29,18 @@ int Init(ESContext* esContext)
 
 	//creation of shaders and program 
 	myShaders.Init("../Resources/Shaders/TriangleShaderVS.vs", "../Resources/Shaders/TriangleShaderFS.fs");
+	skyboxShaders.Init("../Resources/Shaders/SkyboxShaderVS.vs", "../Resources/Shaders/SkyboxShaderFS.fs");
+
+	//creation of skybox texture
+	skyboxTexture.InitTexture("../Resources/Textures/Skybox_Right.tga", "../Resources/Textures/Skybox_Left.tga",
+		"../Resources/Textures/Skybox_Top.tga", "../Resources/Textures/Skybox_Bottom.tga",
+		"../Resources/Textures/Skybox_Front.tga", "../Resources/Textures/Skybox_Back.tga");
+
+
 
 	// Creation of camera and objects
 	cam = new Camera(&myShaders);
+	cam->setSkybox(&skyboxShaders, &skyboxTexture, "../Resources/Models/SkyBox.nfg");
 	woman1 = cam->addObjectsToDraw("../Resources/Textures/Woman1.tga", "../Resources/Models/Woman1.nfg");
 	woman2 = cam->addObjectsToDraw("../Resources/Textures/Woman2.tga", "../Resources/Models/Woman2.nfg");
 	//woman1 = new Object3D("../Resources/Textures/Woman1.tga", "../Resources/Models/Woman1.nfg", &myShaders);
@@ -51,8 +62,6 @@ int Init(ESContext* esContext)
 void Draw(ESContext* esContext)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glUseProgram(myShaders.GetProgram());
 
 	cam->drawAllObject();
 
