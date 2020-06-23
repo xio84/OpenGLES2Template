@@ -23,6 +23,7 @@ public:
 	// Constructors
 	Object3D(Shaders* targetShader);
 	Object3D(char* tgaFile, char* nfgFile, Shaders* targetShader);
+	virtual ~Object3D();
 
 	// Setters
 	void setModel(char* nfgFile);

@@ -3,7 +3,7 @@
 
 SkyboxTexture::~SkyboxTexture()
 {
-	delete[] imageData;
+	//delete[] skyboxData;
 }
 
 void SkyboxTexture::InitTexture(char* TR, char* TL, char* TT, char* TBt, char* TF, char* TBck)

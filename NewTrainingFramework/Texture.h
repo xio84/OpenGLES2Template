@@ -4,7 +4,7 @@ class Texture
 {
 public:
 	GLuint		textureID;
-	char*		imageData;
+	char*		imageData = 0;
 	int			width, height, bpp;
 	Texture();
 	virtual ~Texture();

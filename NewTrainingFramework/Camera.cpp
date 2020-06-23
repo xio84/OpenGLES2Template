@@ -6,6 +6,11 @@ Camera::Camera(Shaders* targetShader) : Object3D(targetShader)
 	translateZ(1);
 }
 
+Camera::~Camera()
+{
+	if (m_pSkyboxModel) delete m_pSkyboxModel;
+}
+
 Matrix Camera::getViewMatrix()
 {
 	Matrix view, rotX, rotY, rotZ, translate;

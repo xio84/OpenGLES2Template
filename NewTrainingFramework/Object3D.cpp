@@ -19,6 +19,12 @@ Object3D::Object3D(char* tgaFile, char* nfgFile, Shaders* targetShader)
 	uniformScale(1);
 }
 
+Object3D::~Object3D()
+{
+	if (m_pModel) delete m_pModel;
+	if (m_pTexture) delete m_pTexture;
+}
+
 void Object3D::setModel(char* nfgFile)
 {
 	m_pModel = new Model;

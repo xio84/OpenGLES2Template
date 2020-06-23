@@ -9,7 +9,7 @@ Texture::Texture()
 
 Texture::~Texture()
 {
-	delete imageData;
+	if (imageData) delete imageData;
 }
 
 void Texture::InitTexture(char* filename)

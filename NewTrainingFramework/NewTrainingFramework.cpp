@@ -163,6 +163,9 @@ void CleanUp()
 	
 	//glDeleteBuffers( 1, &vboId );
 	//glDeleteBuffers( 1, &iboId );
+	if (cam) delete cam;
+	if (woman1) delete woman1;
+	if (woman2) delete woman2;
 }
 
 int _tmain( int argc, _TCHAR* argv[] )

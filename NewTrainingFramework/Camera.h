@@ -21,6 +21,8 @@ public:
     
     // Constructors
     Camera(Shaders* targetShader);
+    // Destructor
+    ~Camera();
 
     Matrix getViewMatrix();
     Matrix getSkyViewMatrix();

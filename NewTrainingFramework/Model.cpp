@@ -71,5 +71,7 @@ void Model::InitModel(char* filename)
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * m_indicesCount, pindices,
 			GL_STATIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		if (verticesData) delete[] verticesData;
+		if (pindices) delete[] pindices;
 	}
 }
