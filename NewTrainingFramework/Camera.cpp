@@ -101,12 +101,17 @@ void Camera::drawAllObject()
 	else {
 		printf("skybox error!");
 	}
+
 	glEnable(GL_DEPTH_TEST);
 	glUseProgram(m_pShaders->GetProgram());
+	if (m_pShaders->GetUniforms().camPosition != -1) {
+		glEnableVertexAttribArray(m_pShaders->GetUniforms().camPosition);
+		glVertexAttribPointer(m_pShaders->GetUniforms().camPosition, 3, GL_FLOAT, GL_FALSE, sizeof(Transform), &m_transform);
+	}
 	for (std::vector<Object3D*>::iterator it = objectsToDraw.begin();
 		it != objectsToDraw.end(); it++) {
 		Object3D* targetObj = *it;
-		targetObj->draw(getProjectionMatrix(), getViewMatrix());
+		targetObj->draw(getProjectionMatrix(), getViewMatrix(), m_pSkyboxTexture);
 	}
 }
 

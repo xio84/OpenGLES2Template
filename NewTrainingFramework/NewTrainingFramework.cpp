@@ -18,6 +18,7 @@ SkyboxTexture	skyboxTexture;
 Camera* cam;
 Object3D* woman1;
 Object3D* woman2;
+Object3D* ball;
 bool keys[8]; // Condition of keys (pressed or not)
 
 int Init(ESContext* esContext)
@@ -43,6 +44,7 @@ int Init(ESContext* esContext)
 	cam->setSkybox(&skyboxShaders, &skyboxTexture, "../Resources/Models/SkyBox.nfg");
 	woman1 = cam->addObjectsToDraw("../Resources/Textures/Woman1.tga", "../Resources/Models/Woman1.nfg");
 	woman2 = cam->addObjectsToDraw("../Resources/Textures/Woman2.tga", "../Resources/Models/Woman2.nfg");
+	ball = cam->addObjectsToDraw("../Resources/Textures/Rock.tga", "../Resources/Models/Ball.nfg");
 	//woman1 = new Object3D("../Resources/Textures/Woman1.tga", "../Resources/Models/Woman1.nfg", &myShaders);
 
 	// Moving the objects
@@ -55,6 +57,11 @@ int Init(ESContext* esContext)
 	// Scaling the objects
 	woman1->uniformScale(0.5);
 	woman2->uniformScale(0.35);
+	ball->uniformScale(0.1);
+
+	// Setting shininess
+	woman1->setShininess(0);
+	woman2->setShininess(0);
 
 	return 0;
 }
@@ -98,7 +105,6 @@ void Update( ESContext *esContext, float deltaTime )
 
 void Key( ESContext *esContext, unsigned char key, bool bIsPressed )
 {
-	printf("%c is pressed\n", key);
 	if (bIsPressed) {
 		switch (key) {
 		case 'S':

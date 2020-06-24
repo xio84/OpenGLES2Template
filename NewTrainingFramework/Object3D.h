@@ -3,6 +3,7 @@
 #include "Shaders.h"
 #include "Model.h"
 #include "Texture.h"
+#include "SkyboxTexture.h"
 
 struct Transform
 {
@@ -16,8 +17,10 @@ class Object3D
 protected:
 	Model* m_pModel;
 	Texture* m_pTexture;
+	//SkyboxTexture* m_pSkyTexture;
 	Shaders* m_pShaders;
 	
+	float m_shininess = 1;
 	Transform m_transform;
 public:
 	// Constructors
@@ -28,6 +31,7 @@ public:
 	// Setters
 	void setModel(char* nfgFile);
 	void setTexture(char* tgaFile);
+	void setShininess(float S);
 
 	void setPosition(float x, float y, float z);
 	void translateX(float t);
@@ -50,6 +54,6 @@ public:
 
 	// Others
 	void draw();
-	void draw(Matrix &proj, Matrix &view);
+	void draw(Matrix &proj, Matrix &view, SkyboxTexture* SkyText);
 };
 

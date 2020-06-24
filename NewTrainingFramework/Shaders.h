@@ -8,12 +8,17 @@ public:
 	{
 		GLint position;
 		GLint uv;
+		GLint norm;
 	};
 
 	struct Uniforms
 	{
 		GLint texture;
 		GLint wvp;
+		GLint world;
+		GLint envi;
+		GLint camPosition;
+		GLint shininess;
 	};
 
 private:

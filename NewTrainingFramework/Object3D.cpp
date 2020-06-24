@@ -37,6 +37,11 @@ void Object3D::setTexture(char* tgaFile)
 	m_pTexture->InitTexture(tgaFile);
 }
 
+void Object3D::setShininess(float S)
+{
+	m_shininess = S;
+}
+
 void Object3D::setPosition(float x, float y, float z)
 {
 	m_transform.position.x = x;
@@ -140,20 +145,52 @@ void Object3D::draw()
 {
 	Matrix proj, view;
 	proj.SetIdentity(); view.SetIdentity();
-	draw(proj, view);
+	draw(proj, view, 0);
 }
 
-void Object3D::draw(Matrix& proj, Matrix& view)
+void Object3D::draw(Matrix& proj, Matrix& view, SkyboxTexture* SkyText)
 {
+	glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
 	// Setting texture uniform
 	m_pTexture->ActivateTexture();
 	// Setting texture parameters
 	glUniform1i(m_pShaders->GetUniforms().texture, 0);
 
+	if (SkyText != 0 && m_pShaders->GetUniforms().envi != -1) {
+		glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
+		// Setting texture uniform
+		SkyText->ActivateTexture();
+		// Setting texture parameters
+		glUniform1i(m_pShaders->GetUniforms().envi, 1);
+	}
+	else {
+		printf("No envi!");
+	}
+
+	if (m_pShaders->GetUniforms().shininess != -1) {
+		glUniform1f(m_pShaders->GetUniforms().shininess, m_shininess);
+	}
+	else {
+		printf("No shininess!");
+	}
+
+	// Drawing Vertices
 	Matrix wvp;
+	Matrix world = getWorldMatrix();
 	wvp.SetIdentity();
-	wvp = getWorldMatrix() * view * proj;
-	glUniformMatrix4fv(m_pShaders->GetUniforms().wvp, 1, false, wvp.m[0]);
+	wvp = world * view * proj;
+	if (m_pShaders->GetUniforms().wvp != 1) {
+		glUniformMatrix4fv(m_pShaders->GetUniforms().wvp, 1, false, wvp.m[0]);
+	}
+	else {
+		printf("No wvp uniform!");
+	}
+	/*if (m_pShaders->GetUniforms().world != 1) {
+		glUniformMatrix4fv(m_pShaders->GetUniforms().world, 1, false, world.m[0]);
+	}
+	else {
+		printf("No world uniform!");
+	}*/
 
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_pModel->m_VBO);
@@ -163,6 +200,9 @@ void Object3D::draw(Matrix& proj, Matrix& view)
 		glEnableVertexAttribArray(m_pShaders->GetAttributes().position);
 		glVertexAttribPointer(m_pShaders->GetAttributes().position, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 	}
+	else {
+		printf("No Position!");
+	}
 
 	if (m_pShaders->GetAttributes().uv != -1)
 	{
@@ -170,13 +210,27 @@ void Object3D::draw(Matrix& proj, Matrix& view)
 		glVertexAttribPointer(m_pShaders->GetAttributes().uv, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (char*)0 + (sizeof(Vector3) * 4));
 	}
 	else {
-		printf("No Color!\n");
+		printf("No UV!\n");
+	}
+
+	if (m_pShaders->GetAttributes().norm != -1)
+	{
+		glEnableVertexAttribArray(m_pShaders->GetAttributes().norm);
+		glVertexAttribPointer(m_pShaders->GetAttributes().norm, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (char*)0 + (sizeof(Vector3) * 1));
+	}
+	else {
+		printf("No Norm!\n");
 	}
 
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_pModel->m_IBO);
 	if (m_pModel->m_indicesCount) glDrawElements(GL_TRIANGLES, m_pModel->m_indicesCount, GL_UNSIGNED_INT, 0);
 
+	// Clear buffers
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	if (SkyText != 0) {
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	}
 }
