@@ -61,7 +61,7 @@ int Init(ESContext* esContext)
 
 	// Setting shininess
 	woman1->setShininess(0);
-	woman2->setShininess(0);
+	woman2->setShininess(0.5);
 
 	return 0;
 }
@@ -82,6 +82,8 @@ void Update( ESContext *esContext, float deltaTime )
 	woman1->rotateY(w1rotation);
 	float w2rotation = woman2->getRotation().z + (deltaTime / slow);
 	woman2->rotateZ(w2rotation);
+	float brotation = ball->getRotation().y + (deltaTime / slow);
+	ball->rotateY(brotation);
 
 	if (keys[0] && !keys[1])
 		cam->moveZ(deltaTime);

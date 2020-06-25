@@ -3,7 +3,6 @@ attribute vec2 a_uv;
 attribute vec3 a_norm;
 
 uniform mat4 u_wvp;
-uniform mat4 u_world;
 
 varying vec2 v_uv;
 varying vec3 v_pos;

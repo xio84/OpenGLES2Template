@@ -15,10 +15,10 @@ struct Transform
 class Object3D
 {
 protected:
-	Model* m_pModel;
-	Texture* m_pTexture;
+	Model* m_pModel = 0;
+	Texture* m_pTexture = 0;
 	//SkyboxTexture* m_pSkyTexture;
-	Shaders* m_pShaders;
+	Shaders* m_pShaders = 0;
 	
 	float m_shininess = 1;
 	Transform m_transform;

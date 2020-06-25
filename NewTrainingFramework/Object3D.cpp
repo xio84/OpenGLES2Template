@@ -27,12 +27,14 @@ Object3D::~Object3D()
 
 void Object3D::setModel(char* nfgFile)
 {
+	if (m_pModel) delete m_pModel;
 	m_pModel = new Model;
 	m_pModel->InitModel(nfgFile);
 }
 
 void Object3D::setTexture(char* tgaFile)
 {
+	if (m_pTexture) delete m_pTexture;
 	m_pTexture = new Texture;
 	m_pTexture->InitTexture(tgaFile);
 }
@@ -185,12 +187,12 @@ void Object3D::draw(Matrix& proj, Matrix& view, SkyboxTexture* SkyText)
 	else {
 		printf("No wvp uniform!");
 	}
-	/*if (m_pShaders->GetUniforms().world != 1) {
+	if (m_pShaders->GetUniforms().world != 1) {
 		glUniformMatrix4fv(m_pShaders->GetUniforms().world, 1, false, world.m[0]);
 	}
 	else {
 		printf("No world uniform!");
-	}*/
+	}
 
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_pModel->m_VBO);
